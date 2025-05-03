@@ -1,0 +1,121 @@
+{
+  "organizations": [
+    {
+      "id": "org001",
+      "name": "Acme Corp",
+      "enabled": true,
+      "theme": {
+        "logoUrl": "/assets/logos/acme.png",
+        "primaryColor": "#1976d2",
+        "mode": "dark"
+      },
+      "createdAt": "2024-12-01T12:00:00Z"
+    },
+    {
+      "id": "org002",
+      "name": "Globex Ltd",
+      "enabled": false,
+      "theme": {
+        "logoUrl": "/assets/logos/globex.png",
+        "primaryColor": "#c62828",
+        "mode": "light"
+      },
+      "createdAt": "2025-01-10T10:00:00Z"
+    }
+  ],
+  "users": [
+    {
+      "id": "u001",
+      "tenantId": "org001",
+      "name": "Alice Admin",
+      "email": "alice@acme.com",
+      "password": "user123",
+      "role": "Admin",
+      "avatar": "/assets/avatars/alice.png",
+      "active": true
+    },
+    {
+      "id": "u002",
+      "tenantId": "org001",
+      "name": "Mark Manager",
+      "email": "mark@acme.com",
+      "password": "user123",
+      "role": "Manager",
+      "avatar": "/assets/avatars/mark.png",
+      "active": true
+    },
+    {
+      "id": "u003",
+      "tenantId": "org001",
+      "name": "Connie Contributor",
+      "email": "connie@acme.com",
+      "password": "user123",
+      "role": "Contributor",
+      "avatar": "/assets/avatars/connie.png",
+      "active": false
+    },
+    {
+      "id": "u004",
+      "name": "Super Admin",
+      "email": "super@admin.com",
+      "password": "admin123",
+      "role": "SuperAdmin",
+      "avatar": "/assets/avatars/greg.png",
+      "active": true
+    }
+  ],
+  "features": [
+    {
+      "tenantId": "org001",
+      "chatSupport": true,
+      "billingModule": false,
+      "customBranding": true,
+      "dynamicForms": true
+    },
+    {
+      "tenantId": "org002",
+      "chatSupport": false,
+      "billingModule": true,
+      "customBranding": false,
+      "dynamicForms": false
+    }
+  ],
+  "activityLogs": [
+    {
+      "id": 1,
+      "tenantId": "org001",
+      "user": "Alice Admin",
+      "action": "Login",
+      "timestamp": "2025-05-01T09:00:00Z"
+    },
+    {
+      "id": 2,
+      "tenantId": "org001",
+      "user": "Mark Manager",
+      "action": "Updated billing settings",
+      "timestamp": "2025-05-01T10:30:00Z"
+    },
+    {
+      "id": 3,
+      "tenantId": "org002",
+      "user": "Greg Globex",
+      "action": "Viewed reports",
+      "timestamp": "2025-05-02T15:45:00Z"
+    }
+  ],
+  "auth": [
+    {
+      "email": "superadmin@admin.com",
+      "password": "supersecure",
+      "role": "Superadmin",
+      "token": "superadmin-token"
+    },
+    {
+      "email": "alice@acme.com",
+      "password": "admin123",
+      "role": "Admin",
+      "tenantId": "org001",
+      "token": "alice-token"
+    }
+  ]
+}

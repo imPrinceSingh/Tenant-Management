@@ -1,0 +1,67 @@
+@if(isSideNavOpen()){
+<div class="fixed top-0 left-0 h-full w-64 bg-indigo-100 shadow-lg z-50 flex flex-col">
+    <!-- Header -->
+    <div class="flex items-center justify-between px-6 py-4 border-b border-gray-200">
+        <h2 class="text-lg font-semibold text-gray-800">Menu</h2>
+        <button (click)="closeSideNav()" aria-label="Close sidebar"
+            class="text-gray-500 hover:text-gray-700 focus:outline-none">
+            &times;
+        </button>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="flex-1 overflow-y-auto px-4 py-6" (click)="closeSideNav()">
+        @if(isAdmin()){<ul class="space-y-4" >
+            <li>
+                <a routerLink="/dashboard" routerLinkActive="text-blue-600 font-medium"
+                    class="block px-4 py-2 rounded hover:bg-gray-100 transition-colors">
+                    Dashboard
+                </a>
+            </li>
+            <li>
+                <a routerLink="/tenant" routerLinkActive="text-blue-600 font-medium"
+                    class="block px-4 py-2 rounded hover:bg-gray-100 transition-colors">
+                    Tenant
+                </a>
+            </li>
+            <!-- <li>
+                <a routerLink="/custom-branding" routerLinkActive="text-blue-600 font-medium"
+                    class="block px-4 py-2 rounded hover:bg-gray-100 transition-colors">
+                    Custom Branding
+                </a>
+            </li> -->
+        </ul>}
+        @else {<ul class="space-y-4">
+            <li>
+                <a routerLink="/dashboard" routerLinkActive="text-blue-600 font-medium"
+                    class="block px-4 py-2 rounded hover:bg-gray-100 transition-colors">
+                    Dashboard
+                </a>
+            </li>
+            @if(userInfo()?.role==='Admin'){<li >
+                <a routerLink="/user-management" routerLinkActive="text-blue-600 font-medium"
+                    class="block px-4 py-2 rounded hover:bg-gray-100 transition-colors">
+                    Users
+                </a>
+            </li>}
+            <li>
+                <a routerLink="/chat-support" routerLinkActive="text-blue-600 font-medium"
+                    class="block px-4 py-2 rounded hover:bg-gray-100 transition-colors">
+                    Chat Support
+                </a>
+            </li>
+            <li>
+                <a routerLink="/billing" routerLinkActive="text-blue-600 font-medium"
+                    class="block px-4 py-2 rounded hover:bg-gray-100 transition-colors">
+                    Billing
+                </a>
+            </li>
+            <li>
+                <a routerLink="/settings" routerLinkActive="text-blue-600 font-medium"
+                    class="block px-4 py-2 rounded hover:bg-gray-100 transition-colors">
+                    Settings
+                </a>
+            </li>
+        </ul>}
+    </nav>
+</div>}
