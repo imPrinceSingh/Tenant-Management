@@ -8,7 +8,7 @@ import { switchMap } from 'rxjs';
 export class SidenavService {
   isSideNavOpen = signal<boolean>(false);
   features = signal<Array<any>>([])
-  tanentInfo = signal<any>({})
+  tenantInfo = signal<any>({})
 
   toggleSideNav(){
     this.isSideNavOpen.update((current)=>!current)
@@ -20,7 +20,7 @@ export class SidenavService {
   getEnabledFeature(tenantId: string) {
     return this.getTenantInfo(tenantId).pipe(
       switchMap((data) => {
-        this.tanentInfo.set(data)
+        this.tenantInfo.set(data)
         return this.http.get<Array<any>>(`http://localhost:3000/features?tenantId=${tenantId}`);
       })
     );

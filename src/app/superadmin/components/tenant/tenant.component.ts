@@ -1,9 +1,12 @@
-import { NgClass, NgFor } from '@angular/common';
-import { Component, Input, Output, EventEmitter, inject, OnInit } from '@angular/core';
+import { NgClass } from '@angular/common';
+import { Component, inject, OnInit } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { RouterLink, Router } from '@angular/router';
 import { TenantService } from '../../services/tenant.service';
 import { HttpClient } from '@angular/common/http';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { ConfirmationDialogComponent } from '../../../shared/components/confirmation-dialog/confirmation-dialog.component';
+import { ToastrService } from 'ngx-toastr';
 
 export interface Tenant {
   id: string;
@@ -18,10 +21,10 @@ export interface Tenant {
 @Component({
   selector: 'app-tenant',
   standalone: true,
-  imports: [NgClass,MatIconModule, RouterLink],
+  imports: [NgClass, MatIconModule, RouterLink, MatDialogModule],
   templateUrl: './tenant.component.html',
 })
-export class TenantComponent implements OnInit{
+export class TenantComponent implements OnInit {
   tenantService = inject(TenantService)
   tenants = this.tenantService.tenantList
 
@@ -30,21 +33,25 @@ export class TenantComponent implements OnInit{
       state: { tenantId: tenant.id }
     });
   }
+  onDelete(tenant: any): void {
+    const dialogRef = this.dialog.open(ConfirmationDialogComponent);
 
-  onDelete(tenant: any) {
-   let updatedTenant = {
-    enabled: false
-    }
-    this.http.patch(`http://localhost:3000/tenants/${tenant.id}`, updatedTenant).subscribe({
-      next: (response)=>{
-        const updatedTenants = this.tenants().filter(item=> item.id!==tenant.id)
-        this.tenants.set(updatedTenants)
-        console.log('Update successful', response)
-    },
-    error: (err)=>{
-      console.error('Update failed', err)
-    }
-   })
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.http.patch(`http://localhost:3000/tenants/${tenant.id}`, { enabled: false }).subscribe({
+          next: (response) => {
+            const updatedTenants = this.tenants().filter(item => item.id !== tenant.id)
+            this.tenants.set(updatedTenants)
+          this.toastr.success('Tenant removed successfully', 'Success')
+            console.log('Delete successful', response)
+          },
+          error: (err) => {
+          this.toastr.error('Error while deleting tenant', 'Error')
+            console.error('Delete failed', err)
+          }
+        })
+      }
+    });
   }
 
   ngOnInit(): void {
@@ -58,6 +65,6 @@ export class TenantComponent implements OnInit{
     });
   }
 
-  constructor(private http: HttpClient, private router: Router) { }
+  constructor(private http: HttpClient, private router: Router, private dialog: MatDialog , private toastr : ToastrService) { }
 
 }

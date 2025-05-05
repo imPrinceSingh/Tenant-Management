@@ -1,1 +1,103 @@
-<p>settings works!</p>
+<div class="max-w-4xl mx-auto p-6 bg-white rounded-lg shadow-sm">
+    <h2 class="text-2xl font-bold text-gray-800 mb-6">Brand Settings</h2>
+    
+    <form (ngSubmit)="saveSettings()" class="space-y-6">
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-1">Theme</label>
+        <div class="space-y-4">
+          <!-- Color Picker Input -->
+          <div class="relative">
+            <div class="flex items-center gap-2">
+              <!-- Text Input -->
+              <input type="text" name="theme" [ngModel]="theme()" (ngModelChange)="updateTheme($event)"
+                placeholder="Enter hex code (e.g. #3b82f6)"
+                class="flex-1 px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500" />
+
+              <!-- Visible Color Picker -->
+              <input type="color" [value]="theme()" (input)="updateThemeColor($event)"
+                class="w-10 h-10 rounded-md border border-gray-300 cursor-pointer" />
+            </div>
+          </div>
+
+          <!-- Preset Theme Options -->
+          <div>
+            <p class="text-sm text-gray-500 mb-2">Quick select:</p>
+            <div class="flex flex-wrap gap-2">
+              @for (preset of themeColors; track preset.value) {
+              <button type="button" [style.backgroundColor]="preset.value"
+                [attr.aria-label]="'Select ' + preset.name + ' theme'" (click)="theme.set(preset.value)"
+                class="w-8 h-8 rounded-full border-2 border-transparent hover:border-gray-300 transition-all"
+                [class.ring-2.ring-blue-500]="theme() === preset.value"></button>
+              }
+            </div>
+          </div>
+        </div>
+      </div>
+  
+      <!-- Logo Upload Section -->
+      <div class="space-y-4">
+        <h3 class="text-lg font-medium text-gray-700">Brand Logo</h3>
+        
+        <div class="flex flex-col sm:flex-row items-start sm:items-center gap-6">
+          <!-- Logo Preview -->
+          <div class="flex-shrink-0">
+            <div class="w-24 h-24 rounded-lg bg-gray-100 border border-gray-200 overflow-hidden flex items-center justify-center">
+              <img *ngIf="selectedFile" [src]="logoUrl()" alt="Logo Preview" class="max-w-full max-h-full object-contain">
+              <span *ngIf="!selectedFile" class="text-gray-400">No logo</span>
+            </div>
+          </div>
+          
+          <!-- Upload Controls -->
+          <div class="flex-1 w-full">
+            <label class="block text-sm font-medium text-gray-700 mb-1">Upload new logo</label>
+            <div class="mt-1 flex items-center">
+              <label for="logo-upload" 
+                     class="cursor-pointer inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                <svg class="-ml-1 mr-2 h-5 w-5 text-gray-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                  <path fill-rule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clip-rule="evenodd" />
+                </svg>
+                Choose File
+              </label>
+              <input id="logo-upload" type="file" accept="image/*" (change)="onFileChange($event)" class="sr-only">
+              <span class="ml-3 text-sm text-gray-500 truncate max-w-xs">
+                <!-- {{settingsForm.value.logo?.name || 'No file chosen'}} -->
+              </span>
+            </div>
+            <p class="mt-1 text-xs text-gray-500">PNG, JPG up to 2MB</p>
+          </div>
+        </div>
+      </div>
+  
+      <!-- Form Actions -->
+      <div class="flex justify-end space-x-3 pt-6 border-t border-gray-200">
+        <button type="button" class="px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+          Cancel
+        </button>
+        <button type="submit"
+                class="px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed">
+          <span *ngIf="isLoading" class="inline-flex items-center">
+            <svg class="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+            Saving...
+          </span>
+          <span *ngIf="!isLoading">Save Changes</span>
+        </button>
+      </div>
+  
+      <!-- Success Message -->
+      <div *ngIf="successMessage" class="rounded-md bg-green-50 p-4">
+        <div class="flex">
+          <div class="flex-shrink-0">
+            <svg class="h-5 w-5 text-green-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+            </svg>
+          </div>
+          <div class="ml-3">
+            <p class="text-sm font-medium text-green-800">{{successMessage}}</p>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>

@@ -3,3 +3,66 @@
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
+:root {
+    --primary-color: #1976d2;
+    --background-color: #ffffff;
+    --text-color: #212121;
+    --card-bg: #f5f5f5;
+    
+  }
+  
+  [data-theme="dark"] {
+    --primary-color: #90caf9;
+    --background-color: #3a3a3bef;
+    --text-color: #e0e0e0;
+    --card-bg: #1e1e1e;
+    
+  }
+  
+  body {
+    background-color: var(--background-color);
+    color: var(--text-color);
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+  
+  /* Customize toastr colors to match your app */
+/* styles.css */
+/* Required base styles */
+.toast-container .ngx-toastr {
+  position: relative;
+  overflow: hidden;
+  margin: 0 0 6px;
+  padding: 15px;
+  width: 300px;
+  border-radius: 4px;
+  background-position: 15px center;
+  background-repeat: no-repeat;
+  box-shadow: 0 0 12px #999;
+  color: #fff;
+}
+
+/* Default colors */
+.toast-success {
+  background-color: #51a351;
+}
+
+.toast-error {
+  background-color: #bd362f;
+}
+
+.toast-info {
+  background-color: #2f96b4;
+}
+
+.toast-warning {
+  background-color: #f89406;
+}
+.toast-custom-position {
+  top: 20px;
+  right: 20px;
+  bottom: auto;
+  left: auto;
+  margin: 0;
+  position: fixed;
+  z-index: 1060;
+}

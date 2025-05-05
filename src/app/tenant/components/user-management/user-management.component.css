@@ -1,0 +1,17 @@
+/* In your component's CSS file or global styles */
+.fixed {
+    position: fixed;
+  }
+  
+  .z-40 {
+    z-index: 40;
+  }
+  
+  .z-50 {
+    z-index: 50;
+  }
+  
+  /* Add transition for smoother overlay */
+  .bg-opacity-50 {
+    transition: opacity 300ms ease-in-out;
+  }

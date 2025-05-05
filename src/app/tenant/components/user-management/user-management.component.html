@@ -1,1 +1,180 @@
-<p>user-management works!</p>
+<div class="flex flex-col">
+    <div class="flex justify-between items-center p-4">
+        <h1 class="text-2xl font-bold text-gray-800 mx-5">Users</h1>
+        <button (click)="toggleForm()"
+            class="w-12 h-12 rounded-full bg-blue-500 text-white flex items-center justify-center shadow-lg hover:bg-blue-600 hover:w-40 hover:rounded-full transition-all duration-300 overflow-hidden group cursor-pointer">
+            <span class="absolute group-hover:opacity-0 transition-opacity duration-200 text-xl">+</span>
+            <span
+                class="absolute opacity-0 group-hover:opacity-100 transition-opacity duration-200 text-sm whitespace-nowrap">
+                + Add user
+            </span>
+        </button>
+    </div>
+
+
+    <!-- Sliding form overlay -->
+    <div *ngIf="formState === 'in'" class="fixed inset-0 bg-opacity-10 backdrop-blur-xs z-40" (click)="toggleForm()">
+    </div>
+
+    <!-- Sliding form panel -->
+    <form [@slideInOut]="formState" class="fixed top-0 right-0 w-full md:w-1/3 h-full bg-white shadow-xl z-50"  (ngSubmit)="isEditId?onUpdate(): saveUser()">
+        <div class="p-6 space-y-6 min-h-full">
+            <!-- Header with close button -->
+            <div class="flex justify-between items-center border-b pb-4">
+                <h2 class="text-2xl font-bold text-gray-800">Add New User</h2>
+                <button type="button" (click)="toggleForm()" class="text-gray-400 hover:text-gray-500">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+
+            <div class="space-y-6">
+                <!-- Form Grid Layout -->
+                <div class="grid grid-cols-1 gap-6">
+                    <!-- Name -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
+                        <div class="relative">
+                            <input type="text"
+                                class="block w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                                placeholder="John Doe" name="name" [ngModel]="name()" (ngModelChange)="name.set($event)"
+                                #nameControl="ngModel" required>
+                            <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                                <mat-icon class="h-5 w-5 !text-gray-400">person</mat-icon>
+                            </div>
+                        </div>
+                        @if(nameControl.hasError('required') && nameControl.touched){
+                            <mat-error class="text-xs text-red-400 ml-2">This field is required</mat-error>
+                            }
+                    </div>
+
+                    <!-- Email -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Email Address</label>
+                        <div class="relative">
+                            <input type="email"
+                                class="block w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                                placeholder="john@example.com" name="email" [ngModel]="email()"
+                                (ngModelChange)="email.set($event)" #emailControl="ngModel" required>
+                            <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                                <mat-icon class="h-5 w-5 !text-gray-400">mail</mat-icon>
+
+                            </div>
+                        </div>
+                        @if (emailControl.invalid && emailControl.touched) {
+                            <mat-error class="text-xs text-red-400 ml-2">This field is required</mat-error>
+                            }
+                            @if (!isEmailInvalid() && email()!=='') {
+                            <mat-error class="text-xs text-red-400 ml-2">Valid email is required</mat-error>
+                            }
+                    </div>
+
+                    <!-- Password -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Password</label>
+                        <div class="relative">
+                            <input type="password"
+                                class="block w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                                placeholder="••••••••" name="password" [ngModel]="password()"
+                                (ngModelChange)="password.set($event)" #passwordControl="ngModel" required>
+                            <div class="absolute inset-y-0 right-0 flex items-center pr-3">
+                                <button type="button" class="text-gray-400 hover:text-gray-600">
+                                    <mat-icon class="h-5 w-5 !text-gray-400">visibility</mat-icon>
+                                </button>
+                            </div>
+                        </div>
+                        @if (passwordControl.invalid && passwordControl.touched) {
+                            <mat-error class="text-xs text-red-400 ml-2">This field is required</mat-error>
+                            }
+                    </div>
+
+                    <!-- Role & Status Row -->
+                    <div class="grid grid-cols-2 gap-4">
+                        <!-- Role -->
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Role</label>
+                            <select
+                                class="block w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                                name="role" [ngModel]="role()" (ngModelChange)="role.set($event)">
+                                @for(role of userRoles; track role.id){
+                                <option [value]="role.id">{{role.name}}</option>
+                                }
+                            </select>
+                        </div>
+
+                        <!-- Status -->
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Status</label>
+                            <select
+                                class="block w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                                name="status" [ngModel]="status()" (ngModelChange)="status.set($event)">
+                                <option [value]="true">Active</option>
+                                <option [value]="false">Inactive</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="sticky bottom-0 bg-white border-t border-gray-200 p-4">
+            <div class="flex space-x-4 ">
+                <button type="button" (click)="toggleForm()"
+                    class="flex-1 px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-all">
+                    Cancel
+                </button>
+                <button type="submit"
+                    class="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 transition-all">
+                    {{isEditId?'Update':'Save'}}
+                </button>
+            </div>
+        </div>
+    </form>
+
+
+    <!-- Table container with proper margin -->
+    <div class="overflow-x-auto rounded-xl shadow border border-gray-200 mx-5 mb-5">
+        <table class="min-w-full bg-white text-sm text-left text-gray-700">
+            <thead class="bg-gray-100 text-xs uppercase text-gray-500">
+                <tr>
+                    <th class="px-6 py-3">#</th>
+                    <th class="px-6 py-3">Name</th>
+                    <th class="px-6 py-3">Email</th>
+                    <th class="px-6 py-3">Role</th>
+                    <th class="px-6 py-3">Status</th>
+                    <th class="px-6 py-3">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @for(user of userList(); track user.id; let i = $index) {
+                <tr class="border-t hover:bg-gray-50">
+                    <td class="px-6 py-4">{{ i + 1 }}</td>
+                    <td class="px-6 py-4 font-medium text-gray-900">{{ user.name }}</td>
+                    <td class="px-6 py-4">{{ user.email }}</td>
+                    <td class="px-6 py-4">{{ getRoleName(user.role) }}</td>
+                    <td class="px-6 py-4">{{ user.active?'Active':'Inactive' }}</td>
+                    <td class="px-6 py-4">
+                        <div class="flex space-x-2">
+                          <!-- Edit Button -->
+                          <button (click)="onEdit(user)" 
+                                  class="p-1.5 text-gray-500 hover:text-blue-600 hover:bg-blue-50 rounded-md transition-all duration-200"
+                                  title="Edit">
+                            <mat-icon class="!w-5 !h-5 !text-current">edit</mat-icon>
+                          </button>
+                          
+                          <!-- Delete Button -->
+                          <button (click)="onDelete(user.id)" 
+                                  class="p-1.5 text-gray-500 hover:text-red-600 hover:bg-red-50 rounded-md transition-all duration-200"
+                                  title="Delete">
+                            <mat-icon class="!w-5 !h-5 !text-current">delete</mat-icon>
+                          </button>
+                        </div>
+                      </td>
+                </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

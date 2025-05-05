@@ -9,6 +9,7 @@ import { TenantService } from '../../services/tenant.service';
 import { MatCardModule } from '@angular/material/card';
 import { ConfigService } from '../../../shared/services/config.service';
 import { Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-tenant-form',
@@ -32,12 +33,12 @@ export class TenantFormComponent {
   featuresId = ''
   selectedFile: File | null = null
 
-  constructor(private router: Router) {
+  constructor(private router: Router, private toastr: ToastrService) {
     this.tenantId = this.router.getCurrentNavigation()?.extras?.state?.['tenantId'];
     if (this.tenantId) {
       this.tenantService.getAllTenantData(this.tenantId).subscribe({
         next: ({ tenant, admin, features }) => {
-          console.log(tenant, admin, features )
+          console.log(tenant, admin, features)
           this.tenantName.set(tenant.name || '');
           this.email.set(tenant.email || '');
           this.phoneNumber.set(tenant.phoneNumber || '');
@@ -49,7 +50,7 @@ export class TenantFormComponent {
           this.adminEmail.set(admin[0]?.email || '')
           this.adminPassword.set(admin[0]?.password || '')
           this.userId = admin[0]?.id
-          this.featuresId = features[0]?.id 
+          this.featuresId = features[0]?.id
           this.features.update(currentFeatures =>
             currentFeatures.map(feature =>
             ({
@@ -87,12 +88,12 @@ export class TenantFormComponent {
     { name: 'Blue', color: '#3b82f6' },
     { name: 'Dark', color: '#1e293b' },
     { name: 'Dark Blue', color: '#1e40af' },
-    { name: 'Red', color: '#ef4444' },       
-    { name: 'Black', color: '#000000' },     
+    { name: 'Red', color: '#ef4444' },
+    { name: 'Black', color: '#000000' },
     // { name: 'Magenta', color: '#d946ef' },  
     // { name: 'Pink', color: '#ec4899' }        
   ];
-  
+
 
   isEmailInvalid = computed(() => {
     return this.email() && /^\S+@\S+\.\S+$/.test(this.email());
@@ -136,14 +137,16 @@ export class TenantFormComponent {
     this.theme.set(input.value);
   }
   submitForm(tenantId: any) {
+    if (this.isFormValid()) { this.toastr.error('Please fill all required field!', 'Error'); return }
     if (tenantId) {
       this.tenantService.updateTenant(tenantId, this.userId, this.featuresId, this.tenantPayload(), this.userPayload()).subscribe({
         next: (response) => {
           this.clearForm()
           this.router.navigate(['/tenant'])
-          console.log('Tenant Updated:', response);
+          this.toastr.success('Tenant has been updated successfully', 'Success')
         },
         error: (err) => {
+          this.toastr.error('Error while updating tenant', 'Error')
           console.error('Error in updating tenant:', err);
         }
       });
@@ -152,9 +155,10 @@ export class TenantFormComponent {
         next: (response) => {
           this.clearForm()
           this.router.navigate(['/tenant'])
-          console.log('Tenant registered:', response);
+          this.toastr.success('Tenant has been added successfully', 'Success')
         },
         error: (err) => {
+          this.toastr.error('Error while creating tenant', 'Error')
           console.error('Error registering tenant:', err);
         }
       });
@@ -182,7 +186,6 @@ export class TenantFormComponent {
     if (input.files && input.files[0]) {
       this.selectedFile = input.files[0];
 
-      // Create preview
       const reader = new FileReader();
       reader.onload = () => {
         const base64 = reader.result as string;

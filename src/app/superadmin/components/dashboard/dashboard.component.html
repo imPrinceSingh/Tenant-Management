@@ -1,1 +1,147 @@
-<p>dashboard works!</p>
+<div class="p-6 bg-gray-50 min-h-screen">
+  <h1 class="text-2xl font-bold text-gray-800 mb-6">Dashboard Overview</h1>
+
+  <!-- Stats Cards -->
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+    <div class="bg-white rounded-lg shadow p-6">
+      <div class="flex items-center justify-between">
+        <div>
+          <p class="text-gray-500 text-sm font-medium">Total Users</p>
+          <h3 class="text-2xl font-bold text-gray-800">{{userCount()}}</h3>
+        </div>
+        <div class="bg-blue-100 p-3 rounded-full">
+          <i class="fas fa-users text-blue-600 text-xl"></i>
+        </div>
+      </div>
+    </div>
+
+    <div class="bg-white rounded-lg shadow p-6">
+      <div class="flex items-center justify-between">
+        <div>
+          <p class="text-gray-500 text-sm font-medium">Active Users</p>
+          <h3 class="text-2xl font-bold text-gray-800">{{activeUsers()}}</h3>
+        </div>
+        <div class="bg-green-100 p-3 rounded-full">
+          <i class="fas fa-chart-line text-green-600 text-xl"></i>
+        </div>
+      </div>
+    </div>
+
+    <div class="bg-white rounded-lg shadow p-6">
+      <div class="flex items-center justify-between">
+        <div>
+          <p class="text-gray-500 text-sm font-medium">New Signups</p>
+          <h3 class="text-2xl font-bold text-gray-800">87</h3>
+        </div>
+        <div class="bg-purple-100 p-3 rounded-full">
+          <i class="fas fa-user-plus text-purple-600 text-xl"></i>
+        </div>
+      </div>
+    </div>
+
+    <div class="bg-white rounded-lg shadow p-6">
+      <div class="flex items-center justify-between">
+        <div>
+          <p class="text-gray-500 text-sm font-medium">Avg. Session</p>
+          <h3 class="text-2xl font-bold text-gray-800">4m 32s</h3>
+        </div>
+        <div class="bg-yellow-100 p-3 rounded-full">
+          <i class="fas fa-clock text-yellow-600 text-xl"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Charts Row -->
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+
+    <!-- Device Distribution -->
+    <div class="bg-white rounded-lg shadow p-6">
+      <h2 class="text-lg font-semibold text-gray-800 mb-4">Active Users Chart</h2>
+      <div class="chart-container" style="height: 200px;">
+        <ngx-charts-pie-chart [scheme]="colorScheme" [results]="usersChartData()" [legend]="true" [labels]="true"
+          [doughnut]="false">
+        </ngx-charts-pie-chart>
+      </div>
+    </div>
+    <!-- User Distribution Chart -->
+    <div class="bg-white rounded-lg shadow p-6">
+      <h2 class="text-lg font-semibold text-gray-800 mb-4">User Distribution</h2>
+      <div class="chart-container" style="height: 200px;">
+        <ngx-charts-advanced-pie-chart [scheme]="colorScheme" [results]="userRoleData()" [gradient]="false"
+          [label]="'User Types'">
+        </ngx-charts-advanced-pie-chart>
+      </div>
+    </div>
+  </div>
+
+  <!-- Recent Activity Table -->
+  <div class="bg-white rounded-lg shadow overflow-hidden mb-8">
+    <div class="p-6 border-b border-gray-200">
+      <h2 class="text-lg font-semibold text-gray-800">Recent Activity</h2>
+    </div>
+    <div class="overflow-x-auto">
+      <table class="min-w-full divide-y divide-gray-200">
+        <thead class="bg-gray-50">
+          <tr>
+            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              User
+            </th>
+            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              Activity
+            </th>
+            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              Time
+            </th>
+            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              Status
+            </th>
+          </tr>
+        </thead>
+        <tbody class="bg-white divide-y divide-gray-200">
+          @for(activity of recentActivities(); track activity?.id){
+            <tr>
+            <td class="px-6 py-4 whitespace-nowrap">
+              <div class="flex items-center">
+                <div class="flex-shrink-0 h-10 w-10">
+                  <img class="h-10 w-10 rounded-full" src="https://randomuser.me/api/portraits/men/5.jpg" alt="">
+                </div>
+                <div class="ml-4">
+                  <div class="text-sm font-medium text-gray-900">{{activity?.name}}</div>
+                  <div class="text-sm text-gray-500">{{activity?.email}}</div>
+                </div>
+              </div>
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap">
+              <div class="text-sm text-gray-900">{{activity?.loginTime?"Login": "Logout"}}</div>
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+              {{formatDateWithTime(activity?.loginTime??activity.logoutTime)}}
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap">
+              <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full" [ngClass]="{
+                        'bg-green-100 text-green-800': activity?.status === 'success',
+                        'bg-yellow-100 text-yellow-800': activity?.status === 'inactive',
+                        'bg-red-100 text-red-800': activity?.status === 'Failed'
+                      }">
+                {{activity?.status}}
+              </span>
+            </td>
+          </tr>}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+
+  <!-- Active Users Chart -->
+  <!-- <div class="bg-white rounded-lg shadow p-6">
+    <h2 class="text-lg font-semibold text-gray-800 mb-4">Active Users by Country</h2>
+    <div class="chart-container" style="height: 400px;">
+      <ngx-charts-bar-vertical [scheme]="colorScheme" [results]="activeUsersData" [gradient]="false" [xAxis]="true"
+        [yAxis]="true" [legend]="false" [showXAxisLabel]="true" [showYAxisLabel]="true" [xAxisLabel]="'Country'"
+        [yAxisLabel]="'Active Users'" [showDataLabel]="true">
+      </ngx-charts-bar-vertical>
+    </div>
+  </div> -->
+</div>
