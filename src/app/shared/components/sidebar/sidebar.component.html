@@ -24,12 +24,6 @@
                     Tenant
                 </a>
             </li>
-            <!-- <li>
-                <a routerLink="/custom-branding" routerLinkActive="text-blue-600 font-medium"
-                    class="block px-4 py-2 rounded hover:bg-gray-100 transition-colors">
-                    Custom Branding
-                </a>
-            </li> -->
         </ul>}
         @else {<ul class="space-y-4">
             <li>
@@ -44,24 +38,17 @@
                     Users
                 </a>
             </li>}
-            <li>
-                <a routerLink="/chat-support" routerLinkActive="text-blue-600 font-medium"
-                    class="block px-4 py-2 rounded hover:bg-gray-100 transition-colors">
-                    Chat Support
-                </a>
-            </li>
-            <li>
-                <a routerLink="/billing" routerLinkActive="text-blue-600 font-medium"
-                    class="block px-4 py-2 rounded hover:bg-gray-100 transition-colors">
-                    Billing
-                </a>
-            </li>
-            <li>
-                <a routerLink="/settings" routerLinkActive="text-blue-600 font-medium"
-                    class="block px-4 py-2 rounded hover:bg-gray-100 transition-colors">
-                    Settings
-                </a>
-            </li>
+            @for(feature of features(); track feature.id){
+                <li>
+                    <a 
+                      [routerLink]="'/' + feature.route" 
+                      routerLinkActive="text-blue-600 font-medium"
+                      class="block px-4 py-2 rounded hover:bg-gray-100 transition-colors"
+                    >
+                      {{ feature.name }}
+                    </a>
+                  </li>
+            }
         </ul>}
     </nav>
 </div>}

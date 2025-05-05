@@ -1,64 +1,63 @@
 import { NgClass, NgFor } from '@angular/common';
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter, inject, OnInit } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
+import { RouterLink, Router } from '@angular/router';
+import { TenantService } from '../../services/tenant.service';
+import { HttpClient } from '@angular/common/http';
 
 export interface Tenant {
   id: string;
   name: string;
   email: string;
+  phoneNumber: string;
+  industry: string;
   status: boolean;
-  theme: {
-    logoUrl : string;
-    primaryColor : string;
-    mode: string;
-  };
+  enabled: boolean
 }
 
 @Component({
   selector: 'app-tenant',
   standalone: true,
-  imports: [NgFor,NgClass,MatIconModule],
+  imports: [NgClass,MatIconModule, RouterLink],
   templateUrl: './tenant.component.html',
 })
-export class TenantComponent {
-  @Input() tenants: Tenant[] = [
-    {
-      "id": "org001",
-      "name": "Acme Corp",
-      "email": "ddd",
-      "status": true,
-      "theme": {
-        "logoUrl": "/assets/logos/acme.png",
-        "primaryColor": "#1976d2",
-        "mode": "dark"
-      },
-    },
-    {
-      "id": "org002",
-      "name": "Globex Ltd",
-      "email": "ddd",
-      "status": false,
-      "theme": {
-        "logoUrl": "/assets/logos/globex.png",
-        "primaryColor": "#c62828",
-        "mode": "light"
-      }
+export class TenantComponent implements OnInit{
+  tenantService = inject(TenantService)
+  tenants = this.tenantService.tenantList
+
+  onEdit(tenant: any) {
+    this.router.navigate(['/tenant-registration'], {
+      state: { tenantId: tenant.id }
+    });
+  }
+
+  onDelete(tenant: any) {
+   let updatedTenant = {
+    enabled: false
     }
-  ];
-
-  @Output() view = new EventEmitter<Tenant>();
-  @Output() edit = new EventEmitter<Tenant>();
-  @Output() delete = new EventEmitter<Tenant>();
-
-  onView(tenant: Tenant) {
-    this.view.emit(tenant);
+    this.http.patch(`http://localhost:3000/tenants/${tenant.id}`, updatedTenant).subscribe({
+      next: (response)=>{
+        const updatedTenants = this.tenants().filter(item=> item.id!==tenant.id)
+        this.tenants.set(updatedTenants)
+        console.log('Update successful', response)
+    },
+    error: (err)=>{
+      console.error('Update failed', err)
+    }
+   })
   }
 
-  onEdit(tenant: Tenant) {
-    this.edit.emit(tenant);
+  ngOnInit(): void {
+    this.http.get<Tenant[]>('http://localhost:3000/tenants?enabled=true').subscribe({
+      next: (data) => {
+        this.tenants.set(data)
+      },
+      error: (err) => {
+        console.error('Failed to fetch tenants:', err);
+      }
+    });
   }
 
-  onDelete(tenant: Tenant) {
-    this.delete.emit(tenant);
-  }
+  constructor(private http: HttpClient, private router: Router) { }
+
 }

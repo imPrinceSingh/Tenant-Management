@@ -32,15 +32,4 @@ onSubmit(): void {
   });
 }
 
-  // onSubmit(): void {
-  //   this.authService.login(email,password).subscribe(/* ... */);
-  // //   if (this.username === 'admin' && this.password === 'admin123') {
-  // //     // Simulate token storage
-  // //     localStorage.setItem('token', 'mock-token');
-  // //     localStorage.setItem('role', 'Admin');
-  // //     this.router.navigate(['/dashboard']);
-  // //   } else {
-  // //     this.errorMessage = 'Invalid username or password';
-  // //   }
-  // }
 }

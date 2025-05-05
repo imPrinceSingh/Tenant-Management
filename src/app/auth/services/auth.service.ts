@@ -15,11 +15,12 @@ export interface User {
 export class AuthService {
   private userSubject = new BehaviorSubject<User | null>(null);
   user$ = this.userSubject.asObservable();
-  private apiUrl = 'http://localhost:3000/users';
+  private apiUrl = 'http://localhost:3000/';
 
   userInfo = signal<User | null>(this.getStoredUser());
   isLoggedIn = computed<boolean>(() => this.userInfo() !== null);
   isAdmin = computed<boolean>(() => this.userInfo()?.role === "SuperAdmin");
+  tenantId = signal<string>(localStorage.getItem('tenantId')||'')
 
   private getStoredUser(): User | null {
     try {
@@ -34,7 +35,7 @@ export class AuthService {
   constructor(private http: HttpClient) { }
 
   login(email: string, password: string): Observable<boolean> {
-    return this.http.get<any[]>(`${this.apiUrl}?email=${email}&password=${password}`).pipe(
+    return this.http.get<any[]>(`${this.apiUrl}auth?email=${email}&password=${password}`).pipe(
       map(users => {
         if (users.length > 0) {
           const user = users[0];
@@ -47,9 +48,6 @@ export class AuthService {
             localStorage.setItem('tenantId', user.tenantId);
           }
           this.userInfo.set(user)  
-          // this.isLoggedIn.set(true)
-          // this.admin.set(user)
-          // console.log(this.isLoggedIn())
           this.userSubject.next(user);
 
           return true;
@@ -60,22 +58,19 @@ export class AuthService {
   }
 
   tenantLogin(email: string, password: string): Observable<boolean> {
-    return this.http.get<any[]>(`${this.apiUrl}?email=${email}&password=${password}`).pipe(
+    return this.http.get<any[]>(`${this.apiUrl}users?email=${email}&password=${password}`).pipe(
       map(users => {
         if (users.length > 0) {
           const user = users[0];
-          // Simulate token
           const fakeToken = 'fake-jwt-token-' + user.id;
           localStorage.setItem('token', fakeToken);
           localStorage.setItem('user', JSON.stringify(user));
           localStorage.setItem('role', user.role || 'user');
           if (user.tenantId) {
+            this.tenantId.set(user.tenantId)
             localStorage.setItem('tenantId', user.tenantId);
           }
           this.userInfo.set(user)  
-          // this.isLoggedIn.set(true)
-          // this.admin.set(user)
-          // console.log(this.isLoggedIn())
           this.userSubject.next(user);
 
           return true;

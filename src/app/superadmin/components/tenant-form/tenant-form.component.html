@@ -1,0 +1,282 @@
+<div class="max-w-4xl mx-auto p-8 bg-white shadow-lg rounded-xl">
+    <div class="flex items-center justify-between mb-6">
+        <h2 class="text-3xl font-bold text-gray-800 pb-2">Tenant Registration</h2>
+        <button (click)="goBack()"
+            class="w-10 h-10 flex items-center justify-center rounded-full bg-gray-200 hover:bg-gray-300 shadow-md transition cursor-pointer"
+            aria-label="Go Back">
+            <mat-icon class="text-gray-700">arrow_back</mat-icon>
+        </button>
+    </div>
+
+    <form (ngSubmit)="submitForm(tenantId)" class="space-y-8">
+        <!-- Tenant Info Section -->
+        <div class="bg-gray-50 p-6 rounded-lg">
+            <h3 class="text-xl font-semibold text-gray-700 mb-4 flex items-center">
+                <mat-icon class="!text-blue-500 me-2">business</mat-icon>
+                Tenant Information
+            </h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Tenant Name *</label>
+                    <input type="text" name="tenantName" placeholder="Company Name" [ngModel]="tenantName()"
+                        (ngModelChange)="tenantName.set($event)" #tenantNameControl="ngModel"
+                        class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+                        required />
+                    @if(tenantNameControl.hasError('required') && tenantNameControl.touched){
+                    <mat-error class="text-xs text-red-400 ml-2">This field is required</mat-error>
+                    }
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1"> Email *</label>
+                    <input type="email" name="email" placeholder="contact@company.com" [ngModel]="email()"
+                        (ngModelChange)="email.set($event)" #emailControl="ngModel" required
+                        class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500" />
+                    @if (emailControl.invalid && emailControl.touched) {
+                    <mat-error class="text-xs text-red-400 ml-2">This field is required</mat-error>
+                    }
+                    @if (!isEmailInvalid() && email()!=='') {
+                    <mat-error class="text-xs text-red-400 ml-2">Valid email is required</mat-error>
+                    }
+                </div>
+
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Phone Number</label>
+                    <input type="text" name="phoneNumber" placeholder="+1 (555) 123-4567" [ngModel]="phoneNumber()"
+                        (ngModelChange)="phoneNumber.set($event)"
+                        class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500" />
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Industry</label>
+                    <input type="text" name="industry" placeholder="e.g. Technology" [ngModel]="industry()"
+                        (ngModelChange)="industry.set($event)"
+                        class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500" />
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Admin Info Section -->
+        <div class="bg-gray-50 p-6 rounded-lg">
+            <h3 class="text-xl font-semibold text-gray-700 mb-4 flex items-center">
+                <mat-icon class="!text-blue-500 me-2">person</mat-icon>
+                Admin Details
+            </h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Admin Name *</label>
+                    <input type="text" name="adminName" placeholder="John Doe" [ngModel]="adminName()"
+                        (ngModelChange)="adminName.set($event)" #adminNameControl="ngModel" required
+                        class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500" />
+
+                    @if (adminNameControl.invalid && adminNameControl.touched) {
+                    <mat-error class="text-xs text-red-400 ml-2">This field is required</mat-error>
+                    }
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Admin Email *</label>
+                    <input type="email" name="adminEmail" placeholder="admin@company.com" [ngModel]="adminEmail()"
+                        (ngModelChange)="adminEmail.set($event)" #adminEmailControl="ngModel" required
+                        class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500" />
+
+                    @if (adminEmailControl.invalid && adminEmailControl.touched) {
+                    <mat-error class="text-xs text-red-400 ml-2"> This field is required</mat-error>
+                    }
+                    @if (!isAdminEmailInvalid() && adminEmail()!=='') {
+                    <mat-error class="text-xs text-red-400 ml-2">Valid email is required</mat-error>
+                    }
+                </div>
+
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Password *</label>
+                    <input type="password" name="adminPassword" placeholder="••••••••" [ngModel]="adminPassword()"
+                        (ngModelChange)="adminPassword.set($event)" #adminPasswordControl="ngModel" required
+                        class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500" />
+
+                    @if (adminPasswordControl.invalid && adminPasswordControl.touched) {
+                    <mat-error class="text-xs text-red-400 ml-2">Password is required</mat-error>
+                    }
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Feature Section -->
+        <div class="bg-gray-50 p-6 rounded-lg">
+            <h3 class="text-xl font-semibold text-gray-700 mb-4 flex items-center">
+                <mat-icon class="!text-blue-500 me-2">science</mat-icon>
+                Features
+            </h3>
+            <mat-card-content>
+                <div class="grid gap-4">
+                    <!-- Using Signals approach -->
+                    @for (feature of features(); track feature.id) {
+                    <mat-card class="p-4">
+                        <div class="flex items-center">
+                            <mat-checkbox [checked]="feature.enabled" (change)="toggleFeature(feature.id)"
+                                color="primary" class="mr-4"></mat-checkbox>
+
+                            <div class="flex-grow">
+                                <div class="flex items-center">
+                                    <mat-icon class="mr-2 !text-gray-500">{{feature.icon}}</mat-icon>
+                                    <h3 class="font-medium text-gray-800">{{feature.name}}</h3>
+                                </div>
+                                <p class="text-sm text-gray-600 mt-1">{{feature.description}}</p>
+                            </div>
+
+                            <span class="text-xs px-2 py-1 rounded-full" [class.bg-green-100]="feature.enabled"
+                                [class.text-green-800]="feature.enabled" [class.bg-red-100]="!feature.enabled"
+                                [class.text-red-800]="!feature.enabled">
+                                {{ feature.enabled ? 'ACTIVE' : 'INACTIVE' }}
+                            </span>
+                        </div>
+                    </mat-card>
+                    }
+                </div>
+            </mat-card-content>
+        </div>
+
+        <!-- Optional Section -->
+        <div class="bg-gray-50 p-6 rounded-lg">
+            <h3 class="text-xl font-semibold text-gray-700 mb-4 flex items-center">
+                <mat-icon class="!text-blue-500 me-2">settings</mat-icon>
+                Optional Settings
+            </h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Theme</label>
+                    <div class="space-y-4">
+                        <!-- Color Picker Input -->
+                        <div class="relative">
+                          <div class="flex items-center gap-2">
+                            <!-- Text Input -->
+                            <input
+                              type="text"
+                              name="theme"
+                              [ngModel]="theme()"
+                              (ngModelChange)="updateTheme($event)"
+                              placeholder="Enter hex code (e.g. #3b82f6)"
+                              class="flex-1 px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+                            />
+                      
+                            <!-- Visible Color Picker -->
+                            <input
+                              type="color"
+                              [value]="theme()"
+                              (input)="updateThemeColor($event)"
+                              class="w-10 h-10 rounded-md border border-gray-300 cursor-pointer"
+                            />
+                          </div>
+                        </div>
+                      
+                        <!-- Preset Theme Options -->
+                        <div>
+                          <p class="text-sm text-gray-500 mb-2">Quick select:</p>
+                          <div class="flex flex-wrap gap-2">
+                            @for (preset of presetThemes; track preset.color) {
+                              <button
+                                type="button"
+                                [style.backgroundColor]="preset.color"
+                                [attr.aria-label]="'Select ' + preset.name + ' theme'"
+                                (click)="theme.set(preset.color)"
+                                class="w-8 h-8 rounded-full border-2 border-transparent hover:border-gray-300 transition-all"
+                                [class.ring-2.ring-blue-500]="theme() === preset.color"
+                              ></button>
+                            }
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                      
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Status</label>
+                    <select name="status" [ngModel]="status()" (ngModelChange)="status.set($event)"
+                        class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 bg-white">
+                        <option value="Active">Active</option>
+                        <option value="Inactive">Inactive</option>
+                        <option value="Pending">Pending</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Logo URL</label>
+                    <div class="space-y-4">
+                        <div class="relative">
+                          <input 
+                            type="file" 
+                            id="file-upload"
+                            (change)="onFileSelected($event)" 
+                            accept="image/*" 
+                            class="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                          />
+                          <label 
+                            for="file-upload"
+                            class="block w-full px-4 py-6 border-2 border-dashed border-gray-300 rounded-lg text-center hover:border-blue-400 transition-colors duration-200 cursor-pointer"
+                          >
+                            <div class="flex flex-col items-center justify-center space-y-2">
+                              <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                              </svg>
+                              <span class="text-lg font-medium text-gray-700">
+                                @if (selectedFile) {
+                                  Change Image
+                                } @else {
+                                  Upload Image
+                                }
+                              </span>
+                              <span class="text-sm text-gray-500">PNG, JPG, GIF up to 5MB</span>
+                            </div>
+                          </label>
+                        </div>
+                      
+                        <!-- Image Preview -->
+                        
+                      </div>
+                    </div>
+                    <div>
+                        @if (selectedFile) {
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Preview</label>
+
+                            <div class="mt-4">
+                              <div class="relative w-40 h-40 rounded-md overflow-hidden border border-gray-200">
+                                <img 
+                                  [src]="logoUrl()" 
+                                  alt="Preview" 
+                                  class="w-full h-full object-cover"
+                                />
+                                <button 
+                                  (click)="clearFile()"
+                                  type="button"
+                                  class="absolute top-1 right-1 bg-red-500 text-white rounded-full p-1 hover:bg-red-600 transition-colors"
+                                >
+                                  <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
+                                  </svg>
+                                </button>
+                              </div>
+                              <p class="mt-1 text-sm text-gray-500 truncate">
+                                {{ selectedFile.name }} ({{ (selectedFile.size / 1024).toFixed(2) }} KB)
+                              </p>
+                            </div>
+                          }
+                    </div>
+
+              
+
+            </div>
+        </div>
+
+        <!-- Submit Button -->
+        <div class="flex justify-end">
+            <button type="submit"
+                class="px-6 py-3 bg-blue-600 text-white font-medium rounded-md shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors duration-200">
+                {{tenantId?'Update':'Register'}}
+            </button>
+        </div>
+    </form>
+</div>

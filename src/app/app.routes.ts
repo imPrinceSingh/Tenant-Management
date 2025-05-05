@@ -12,17 +12,21 @@ const routes: Routes = [
         path: 'admin-login',
         loadComponent: () => import('./superadmin/components/login/login.component').then(m => m.LoginComponent)
     },
-     {
+    {
         path: 'admin-dashboard',
         loadComponent: () => import('./superadmin/components/dashboard/dashboard.component').then(m => m.DashboardComponent)
     },
     {
-        path: 'dashboard',
-        loadComponent: () => import('./tenant/components/dashboard/dashboard.component').then(m => m.DashboardComponent)
-    },
-    {
         path: 'tenant',
         loadComponent: () => import('./superadmin/components/tenant/tenant.component').then(m => m.TenantComponent)
+    },
+    {
+        path: 'tenant-registration',
+        loadComponent: () => import('./superadmin/components/tenant-form/tenant-form.component').then(m => m.TenantFormComponent)
+    },
+    {
+        path: 'dashboard',
+        loadComponent: () => import('./tenant/components/dashboard/dashboard.component').then(m => m.DashboardComponent)
     },
     {
         path: 'user-management',
