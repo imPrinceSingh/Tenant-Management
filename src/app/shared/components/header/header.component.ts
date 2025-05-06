@@ -4,12 +4,13 @@ import { Router } from '@angular/router';
 import { SidenavService } from '../../services/sidenav.service';
 import { AuthService } from '../../../auth/services/auth.service';
 import { ToastrService } from 'ngx-toastr';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.css'],
-  imports: [NgStyle]
+  imports: [NgStyle, TranslateModule]
 })
 export class HeaderComponent {
   sideNavService = inject(SidenavService)
@@ -20,7 +21,9 @@ export class HeaderComponent {
   isLoggedIn = this.authService.isLoggedIn;
   tenantId = this.authService.tenantId
 
-  constructor(private router: Router, private toastr : ToastrService) {}
+  constructor(private router: Router, private toastr : ToastrService, private translate: TranslateService) {
+    this.translate.setDefaultLang('hi');
+  }
 
   logout(): void {
     this.authService.logout(this.userInfo()).subscribe({

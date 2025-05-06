@@ -49,7 +49,7 @@
       @if (isLoggedIn()) {
         <div class="flex items-center space-x-4">
           <div class="hidden sm:block text-sm text-gray-500">
-            Welcome, <span class="font-medium text-gray-700">{{ userInfo()?.name }}</span>
+            <span class="font-medium text-gray-700"> {{'WELCOME'| translate: {name: userInfo()?.name} }}</span>
           </div>
           
           <!-- Logout Button -->

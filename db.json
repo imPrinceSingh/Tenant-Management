@@ -261,6 +261,15 @@
       "loginTime": "2025-05-05T20:15:18.773Z",
       "deviceInfo": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Safari/537.36 (1366x768)",
       "status": "success"
+    },
+    {
+      "id": "7ca2",
+      "userId": "u001",
+      "email": "alice@acme.com",
+      "tenantId": "d31e",
+      "loginTime": "2025-05-06T08:32:34.786Z",
+      "deviceInfo": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Safari/537.36 (1366x768)",
+      "status": "success"
     }
   ],
   "activeUsers": [
@@ -276,8 +285,8 @@
       "id": "u001",
       "userId": "u001",
       "email": "alice@acme.com",
-      "lastActive": "2025-05-05T20:15:18.773Z",
-      "sessionStart": "2025-05-05T20:15:18.773Z",
+      "lastActive": "2025-05-06T08:32:34.786Z",
+      "sessionStart": "2025-05-06T08:32:34.786Z",
       "status": "active"
     }
   ],

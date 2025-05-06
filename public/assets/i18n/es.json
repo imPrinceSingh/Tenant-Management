@@ -1,0 +1,8 @@
+{
+    "HELLO": "Hola",
+    "WELCOME": "¡Bienvenido, {{name}}!",
+    "BUTTONS": {
+      "SAVE": "Guardar",
+      "CANCEL": "Cancelar"
+    }
+  }

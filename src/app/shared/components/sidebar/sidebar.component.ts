@@ -6,6 +6,7 @@ import { HttpClient } from '@angular/common/http';
 import { ConfigService } from '../../services/config.service';
 import { ThemeService } from '../../services/theme.service';
 import { MatIconModule } from '@angular/material/icon';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-sidebar',
@@ -24,7 +25,12 @@ export class SidebarComponent implements OnInit {
   isSideNavOpen = this.sideNavService.isSideNavOpen
   features = this.configService.features
   tenantId = this.authService.tenantId
-
+  showLanguageMenu = false;
+  availableLanguages = [
+    { code: 'en', name: 'English' },
+    { code: 'hi', name: 'हिंदी' },
+    { code: 'es', name: 'Español' } // Add more languages as needed
+  ];
 
   get isDark(): boolean {
     return this.themeService.isDarkTheme();
@@ -41,8 +47,19 @@ export class SidebarComponent implements OnInit {
   ngOnInit(): void {
     this.authService.startWatching();
   }
-  
-  constructor(private http: HttpClient) {
+  switchLanguage(lang: string) {
+    this.translate.use(lang);
+  }
+  toggleLanguageMenu() {
+    this.showLanguageMenu = !this.showLanguageMenu;
+  }
+  getCurrentLanguageName(): string {
+    const currentLang = this.translate.currentLang;
+    const lang = this.availableLanguages.find(l => l.code === currentLang);
+    return lang ? lang.name : 'English';
+  }
+
+  constructor(private http: HttpClient, private translate : TranslateService) {
     effect(() => {
       const id = this.tenantId();
       if (id) {

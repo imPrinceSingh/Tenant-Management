@@ -1,59 +1,112 @@
 # TenantAdminPortal
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.2.10.
+A scalable Angular-based admin dashboard with multi-tenant support, RBAC, and real-time analytics.  
+*(Inspired by Atlassian Admin/Firebase Console)*  
 
-## Development server
+[![Angular](https://img.shields.io/badge/Angular-16+-DD0031?logo=angular)](https://angular.io/)
+[![License](https://img.shields.io/badge/License-MIT-blue)](LICENSE)
 
-To start a local development server, run:
+## ✨ Features
 
-```bash
-ng serve
+### 🏢 Organization Management  
+- Tenant isolation via `tenantId` injection  
+- Superadmin controls with soft-delete functionality  
+- Dynamic branding (logos/themes per tenant)  
+
+### 👥 Team & User Management  
+- Role-Based Access Control (RBAC) hierarchy  
+- User impersonation for admins  
+- Simulated email invitations  
+
+### 🛠️ Dynamic Feature Toggles  
+- JSON-configurable UI components  
+- Tenant-level feature flags (Billing/Chat modules)  
+
+### 📈 Real-Time Analytics  
+- Live user activity dashboards  
+- WebSocket-driven metrics  
+
+## 🏗️ Architecture
+```mermaid
+🧩 Modular Design
+The app is split into feature-based modules for scalability and maintainability:
+- `/auth` – Authentication & session management
+- `/providers` – Manage custom providers in project
+- `/shared` – Reusable components, services, guards, directives
+- `/tenant` – User & settings management
+- `/superadmin` – Tenant management
+- `/features` – Dynamic feature toggles
+- `/dashboard` – Real-time analytics
+
+🌐 Multi-Tenancy Strategy
+- **Tenant Identification**: Extracted via JWT token or request context
+- **Data Isolation**: All backend records include `tenantId`
+- **Dynamic Branding**: App layout and themes adapt per tenant settings
+- **Tenant Schemas (optional)**: Supports schema-per-tenant DB design
+
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+## Project Structure 
 
-## Code scaffolding
+```text
+    src/
+    └──app/
+        ├── auth/ 
+        |     └── guards/         
+        ├── providers/
+        ├── shared/ 
+        ├── superadmin/ 
+        └── tenant/         
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
-
-```bash
-ng generate component component-name
 ```
-
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
-
+## Installation
 ```bash
-ng generate --help
+ # Clone repo
+git clone https://github.com/imPrinceSingh/tenant-management.git
+cd tenant-management
+
+# Install dependencies
+npm install
+
+# Start mock API (requires Docker)
+json-server --watch db.json
+
+# Run application
+npm start
 ```
+## Demonstrations 
 
-## Building
+### Tenant Organization View
+![alt text](admin-dashboard.PNG)
 
-To build the project run:
+### i18n & Theming
+![alt text](<mode and language.PNG>)
 
-```bash
-ng build
-```
+### Role-Based User Management
+![alt text](<User creation.PNG>)
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+### Brand Settings
+![alt text](<theme and logo settings.PNG>)
 
-## Running unit tests
+---
 
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
+## 🔐 Login Credentials
 
-```bash
-ng test
-```
+### SuperAdmin
 
-## Running end-to-end tests
+- **Login Route**: `/admin-login`  
+- **Email**: `super@admin.com`  
+- **Password**: `supersecure`  
 
-For end-to-end (e2e) testing, run:
+### Tenant Users
 
-```bash
-ng e2e
-```
+- **Login Route**: `/`  
+- **Email**: `alice@acme.com`  
+- **Password**: `user123`  
+- *More users available in `db.json` or create via `/user-management`*
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+---
 
-## Additional Resources
+## 📄 License
 
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+This project is licensed under the MIT License.- Prince Singh

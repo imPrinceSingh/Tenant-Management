@@ -1,101 +1,141 @@
 @if(isSideNavOpen()) {
-    <div class="fixed inset-0 z-40">
-      <!-- Overlay -->
-      <div class="fixed inset-0 backdrop-blur-xs bg-opacity-50" (click)="closeSideNav()"></div>
-      
-      <!-- Sidebar -->
-      <div class="relative flex flex-col h-full w-64 bg-white shadow-xl z-50 transform transition-all duration-300 ease-in-out">
-        <!-- Header -->
-        <div class="flex items-center justify-between px-6 py-5 bg-indigo-600 text-white">
-          <h2 class="text-xl font-semibold">Navigation</h2>
-          <button (click)="closeSideNav()" aria-label="Close sidebar"
-                  class="p-1 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-white">
-            <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+<div class="fixed inset-0 z-40 ">
+  <!-- Overlay -->
+  <div class="fixed inset-0 backdrop-blur-xs bg-opacity-50" (click)="closeSideNav()"></div>
+
+  <!-- Sidebar -->
+  <div
+    class="relative flex flex-col h-full w-64 bg-white shadow-xl z-50 transform transition-all duration-300 ease-in-out">
+    <!-- Header -->
+    <div class="flex items-center justify-between px-6 py-5 bg-indigo-600 text-white">
+      <h2 class="text-xl font-semibold">Navigation</h2>
+      <button (click)="closeSideNav()" aria-label="Close sidebar"
+        class="p-1 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-white">
+        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="flex-1 overflow-y-auto px-2 py-4">
+      @if(isAdmin()) {
+      <ul class="space-y-1" (click)="closeSideNav()">
+        <li>
+          <a routerLink="/admin-dashboard" routerLinkActive="bg-indigo-50 text-indigo-700"
+            class="flex items-center px-4 py-3 text-gray-700 hover:bg-indigo-50 hover:text-indigo-600 rounded-lg transition-colors">
+            <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
             </svg>
-          </button>
+            Dashboard
+          </a>
+        </li>
+        <li>
+          <a routerLink="/tenant" routerLinkActive="bg-indigo-50 text-indigo-700"
+            class="flex items-center px-4 py-3 text-gray-700 hover:bg-indigo-50 hover:text-indigo-600 rounded-lg transition-colors">
+            <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+            </svg>
+            Tenant Management
+          </a>
+        </li>
+      </ul>
+      } @else {
+      <ul class="space-y-1" (click)="closeSideNav()">
+        <li>
+          <a routerLink="/dashboard" routerLinkActive="bg-indigo-50 text-indigo-700"
+            class="flex items-center px-4 py-3 text-gray-700 hover:bg-indigo-50 hover:text-indigo-600 rounded-lg transition-colors">
+            <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
+            </svg>
+            Dashboard
+          </a>
+        </li>
+
+        @if(userInfo()?.role === 'Admin') {
+        <li>
+          <a routerLink="/user-management" routerLinkActive="bg-indigo-50 text-indigo-700"
+            class="flex items-center px-4 py-3 text-gray-700 hover:bg-indigo-50 hover:text-indigo-600 rounded-lg transition-colors">
+            <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+            </svg>
+            User Management
+          </a>
+        </li>
+        }
+
+        @for(feature of features(); track feature.id) {
+        <li>
+          <a [routerLink]="'/' + feature.route" routerLinkActive="bg-indigo-50 text-indigo-700"
+            class="flex items-center px-4 py-3 text-gray-700 hover:bg-indigo-50 hover:text-indigo-600 rounded-lg transition-colors">
+            <mat-icon class="me-2">{{feature.icon}}</mat-icon>
+            {{ feature.name }}
+          </a>
+        </li>
+        }
+      </ul>
+      }
+    </nav>
+    <div class="px-4 py-3 hover:bg-indigo-100 rounded-lg transition-colors cursor-pointer group"
+      (click)="toggleLanguageMenu()">
+      <div class="flex items-center gap-3">
+        <!-- Language Icon -->
+        <div class="w-6 h-6 flex items-center justify-center text-gray-300 dark:text-gray-800">
+          <mat-icon class="material-icons-round text-xl">language</mat-icon>
         </div>
-    
-        <!-- Navigation -->
-        <nav class="flex-1 overflow-y-auto px-2 py-4">
-          @if(isAdmin()) {
-            <ul class="space-y-1" (click)="closeSideNav()">
-              <li>
-                <a routerLink="/admin-dashboard" routerLinkActive="bg-indigo-50 text-indigo-700" 
-                   class="flex items-center px-4 py-3 text-gray-700 hover:bg-indigo-50 hover:text-indigo-600 rounded-lg transition-colors">
-                  <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
-                  </svg>
-                  Dashboard
-                </a>
-              </li>
-              <li>
-                <a routerLink="/tenant" routerLinkActive="bg-indigo-50 text-indigo-700"
-                   class="flex items-center px-4 py-3 text-gray-700 hover:bg-indigo-50 hover:text-indigo-600 rounded-lg transition-colors">
-                  <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
-                  </svg>
-                  Tenant Management
-                </a>
-              </li>
-            </ul>
-          } @else {
-            <ul class="space-y-1" (click)="closeSideNav()">
-              <li>
-                <a routerLink="/dashboard" routerLinkActive="bg-indigo-50 text-indigo-700"
-                   class="flex items-center px-4 py-3 text-gray-700 hover:bg-indigo-50 hover:text-indigo-600 rounded-lg transition-colors">
-                  <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
-                  </svg>
-                  Dashboard
-                </a>
-              </li>
-              
-              @if(userInfo()?.role === 'Admin') {
-                <li>
-                  <a routerLink="/user-management" routerLinkActive="bg-indigo-50 text-indigo-700"
-                     class="flex items-center px-4 py-3 text-gray-700 hover:bg-indigo-50 hover:text-indigo-600 rounded-lg transition-colors">
-                    <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
-                    </svg>
-                    User Management
-                  </a>
-                </li>
-              }
-              
-              @for(feature of features(); track feature.id) {
-                <li >
-                  <a [routerLink]="'/' + feature.route" routerLinkActive="bg-indigo-50 text-indigo-700"
-                     class="flex items-center px-4 py-3 text-gray-700 hover:bg-indigo-50 hover:text-indigo-600 rounded-lg transition-colors">
-                    <mat-icon class="me-2">{{feature.icon}}</mat-icon>
-                    {{ feature.name }}
-                  </a>
-                </li>
-              }
-            </ul>
-          }
-        </nav>
-        <div class="px-4 py-3 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-lg transition-colors cursor-pointer"
-        (click)="toggleTheme()">
-     <div class="flex items-center gap-3">
-       <!-- Icon -->
-       <div class="w-6 h-6 flex items-center justify-center text-gray-700 dark:text-gray-300">
-         <mat-icon class="material-icons-round text-xl">
-           {{ isDark ? 'light_mode' : 'dark_mode' }}
-         </mat-icon>
-       </div>
-       
-       <!-- Label -->
-       <span class="text-sm font-medium text-gray-700 dark:text-gray-300">
-         {{ isDark ? 'Light Mode' : 'Dark Mode' }}
-       </span>
-     </div>
-   </div>
-        
-        <!-- Footer -->
-        <div class="px-4 py-3 border-t border-gray-200 bg-gray-50">
-          <div class="text-sm text-gray-500">v1.0.2</div>
+
+        <!-- Current Language Label -->
+        <span class="text-sm font-medium text-gray-700 dark:text-gray-800">
+          {{ getCurrentLanguageName() }}
+        </span>
+
+        <!-- Dropdown Arrow -->
+        <mat-icon class="material-icons-round text-lg transform transition-transform duration-200"
+          [class.rotate-180]="showLanguageMenu">
+          keyboard_arrow_down
+        </mat-icon>
+      </div>
+
+      <!-- Language Dropdown Menu -->
+      @if(showLanguageMenu){<div
+        class="absolute left-0 mt-2 w-full bg-white dark:bg-gray-800 rounded-md shadow-lg z-10 overflow-hidden"
+        @fadeInOut>
+        <div class="py-1">
+          @for(lang of availableLanguages; track lang.code){
+          <div class="px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center gap-3 cursor-pointer"
+            (click)="switchLanguage(lang.code); $event.stopPropagation()">
+            <span class="text-sm font-medium text-gray-700 dark:text-gray-300">
+              {{ lang.name }}
+            </span>
+          </div>}
         </div>
+      </div>}
+    </div>
+    <div class="px-4 py-3 hover:bg-indigo-100 rounded-lg transition-colors cursor-pointer"
+      (click)="toggleTheme()">
+      <div class="flex items-center gap-3">
+        <!-- Icon -->
+        <div class="w-6 h-6 flex items-center justify-center !hover:text-gray-200 dark:text-gray-800">
+          <mat-icon class="material-icons-round text-xl">
+            {{ isDark ? 'light_mode' : 'dark_mode' }}
+          </mat-icon>
+        </div>
+
+        <!-- Label -->
+        <span class="text-sm font-medium text-gray-200 dark:text-gray-800">
+          {{ isDark ? 'Light Mode' : 'Dark Mode' }}
+        </span>
       </div>
     </div>
-    }
+
+    <!-- Footer -->
+    <div class="px-4 py-3 border-t border-gray-200 bg-gray-50">
+      <div class="text-sm text-gray-500">v1.0.2</div>
+    </div>
+  </div>
+</div>
+}
