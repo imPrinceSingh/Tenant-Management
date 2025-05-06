@@ -27,7 +27,7 @@ A scalable Angular-based admin dashboard with multi-tenant support, RBAC, and re
 - WebSocket-driven metrics  
 
 ## 🏗️ Architecture
-```mermaid
+
 🧩 Modular Design
 The app is split into feature-based modules for scalability and maintainability:
 - `/auth` – Authentication & session management
@@ -44,7 +44,6 @@ The app is split into feature-based modules for scalability and maintainability:
 - **Dynamic Branding**: App layout and themes adapt per tenant settings
 - **Tenant Schemas (optional)**: Supports schema-per-tenant DB design
 
-```
 
 ## Project Structure 
 
